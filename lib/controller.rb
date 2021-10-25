@@ -13,7 +13,7 @@ class ApplicationController < Sinatra::Base
   get '/gossips/:id/' do
     id = params["id"].to_i
     url = "/"
-    erb :show, locals: {author: Gossip.all[id].author, content: Gossip.all[id].content, id: id, url: url}
+    erb :show, locals: {author: Gossip.all[id].author, content: Gossip.all[id].content, comments: Gossip.all[id].comments, id: id, url: url}
   end
 
   get '/gossips/:id/edit/' do
@@ -25,12 +25,26 @@ class ApplicationController < Sinatra::Base
     author = params["gossip_author"] 
     content =  params["gossip_content"]
     id = params["id"].to_i
-    Gossip.new(author, content).edit(id)
+    comment_array = Gossip.all[id].comments
+    Gossip.new(author, content, comment_array).edit(id)
     redirect "/"
   end
 
   post '/gossips/new/' do
-    Gossip.new(params["gossip_author"], params["gossip_content"]).save
+    Gossip.new(params["gossip_author"], params["gossip_content"], []).save
     redirect "/"
-  end 
+  end
+
+  post '/gossips/:id/comments/' do
+    id = params["id"].to_i
+    author = Gossip.all[id].author
+    content = Gossip.all[id].content
+    comment_array = Gossip.all[id].comments
+    current_comment = params["gossip_comment"]
+ 
+
+    Gossip.new(author, content, comment_array).edit_comments(id, current_comment)
+    redirect "/"
+  end
+
 end 

@@ -6,13 +6,20 @@
     <h1>PAGE POTIN</h1>
       <p>
        <%= "Voici la page du potin n°#{id}"  %><br/>
+        <form action='/gossips/<%= id%>/comments/' method='POST'>
+          Commenter le potin : <input type='text' name='gossip_comment'/><br/>
+          <input type='submit'/>
+        </form>
+
+        <% comments.split.each do |gossip, index| %>
         
-        <%= author %><br/>
-        <%= content %>
+          <%= gossip %><br/>
+          
+        <% end %>
 
         <a href="/">  
           <button>Lien pour revenir à la page des potins</button>  
         </a>
       </p>
   </body>
-</html>
+</html> 
